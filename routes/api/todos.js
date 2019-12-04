@@ -40,4 +40,21 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+// Update todo by id
+router.put('/:id', (req, res) => {
+  const id = req.params.id;
+
+  const data = {title: req.body.title, date: req.body.date};
+
+  console.log(data.title, data.date, id);
+
+  pool.query('UPDATE todos SET title=($1), date=($2) WHERE id=($3)',
+  [data.title, data.date, id], error => {
+    if (error) {
+      console.log(error);
+    }
+    res.status(201).json({ status: 'success', message: 'Todo updated.' });
+  });
+});
+
 module.exports = router;
