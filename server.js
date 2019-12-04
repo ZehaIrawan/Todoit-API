@@ -1,40 +1,13 @@
 const express = require('express');
 const { pool } = require('./config');
+const router = express.Router();
 
 const app = express();
 
+// Init Middleware
 app.use(express.json({ extended: false }));
 
-const getTodos = (request, response) => {
-  pool.query('SELECT * FROM todos', (error, results) => {
-    if (error) {
-    console.log(error);
-    }
-    response.status(200).json(results.rows);
-  });
-};
-
-const addTodo = (request, response) => {
-  const { title, date } = request.body;
-
-  pool.query(
-    'INSERT INTO todos (title, date) VALUES ($1, $2)',
-    [title, date],
-    error => {
-      if (error) {
-        console.log(error);
-      }
-      response.status(201).json({ status: 'success', message: 'Todo added.' });
-    },
-  );
-};
-
-app
-  .route('/todos')
-  // GET endpoint
-  .get(getTodos)
-  // POST endpoint
-  .post(addTodo);
+app.use('/api/todos', require('./routes/api/todos'));
 
 // Start server
 app.listen(process.env.PORT || 5000, () => {
