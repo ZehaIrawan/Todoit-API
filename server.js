@@ -1,9 +1,15 @@
-const express = require('express')
+const express = require('express');
+const { pool } = require('./config');
+const router = express.Router();
 
-const app = express()
+const app = express();
 
-app.get('/', (req, res) => res.send('API Running')) 
+// Init Middleware
+app.use(express.json({ extended: false }));
 
-const PORT = process.env.PORT || 5000
+app.use('/api/todos', require('./routes/api/todos'));
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+// Start server
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server listening`);
+});
