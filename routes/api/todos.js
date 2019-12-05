@@ -3,24 +3,25 @@ const router = express.Router();
 const { pool } = require('../../config');
 
 // Add todo
-router.post('/', (request, response) => {
-  const { title, date } = request.body;
+router.post('/', (req, res) => {
+  const { title, completed } = req.body;
 
   pool.query(
-    'INSERT INTO todos (title, date) VALUES ($1, $2)',
-    [title, date],
-    error => {
+    'INSERT INTO todos (title,completed) VALUES ($1, $2) RETURNING *',
+    [title, completed],
+    (error, results) => {
       if (error) {
-        res.status(500).send('Server Error');
+        console.log(error);
       }
-      response.status(201).json({ status: 'success', message: 'Todo added.' });
+
+          res.status(200).json(results.rows[0]);
     },
   );
 });
 
 //Get all todos
 router.get('/', (req, res) => {
-  pool.query('SELECT * FROM todos', (error, results) => {
+  pool.query('SELECT * FROM todos ORDER BY id DESC', (error, results) => {
     if (error) {
       console.log(error);
     }
@@ -36,14 +37,12 @@ router.delete('/:id', (req, res) => {
     if (error) {
       console.log(error);
     }
-
-    res.status(201).json({ status: 'success', message: 'Todo deleted.' });
   });
   pool.query('SELECT * FROM todos', (error, results) => {
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    res.send(results.rows);
   });
 });
 
@@ -51,20 +50,30 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
   const id = req.params.id;
 
-  const data = {title: req.body.title, date: req.body.date};
+  const data = {
+    title: req.body.title,
+    completed: !req.body.completed,
+  };
 
-  pool.query('UPDATE todos SET title=($1), date=($2) WHERE id=($3)',
-  [data.title, data.date, id], (error, results) => {
-    if (error) {
-      console.log(error);
-    }
-    pool.query('SELECT * FROM todos WHERE id=($1)', [id],(error, results) => {
+  pool.query(
+    'UPDATE todos SET title=($1), completed=($2) WHERE id=($3)',
+    [data.title, data.completed, id],
+    (error, results) => {
       if (error) {
         console.log(error);
       }
-      res.status(200).json(results.rows);
-    })
-  });
+      pool.query(
+        'SELECT * FROM todos WHERE id=($1)',
+        [id],
+        (error, results) => {
+          if (error) {
+            console.log(error);
+          }
+          res.status(200).json(results);
+        },
+      );
+    },
+  );
 });
 
 module.exports = router;
