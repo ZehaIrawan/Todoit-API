@@ -36,7 +36,14 @@ router.delete('/:id', (req, res) => {
     if (error) {
       console.log(error);
     }
+
     res.status(201).json({ status: 'success', message: 'Todo deleted.' });
+  });
+  pool.query('SELECT * FROM todos', (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    res.status(200).json(results.rows);
   });
 });
 
@@ -46,14 +53,17 @@ router.put('/:id', (req, res) => {
 
   const data = {title: req.body.title, date: req.body.date};
 
-  console.log(data.title, data.date, id);
-
   pool.query('UPDATE todos SET title=($1), date=($2) WHERE id=($3)',
-  [data.title, data.date, id], error => {
+  [data.title, data.date, id], (error, results) => {
     if (error) {
       console.log(error);
     }
-    res.status(201).json({ status: 'success', message: 'Todo updated.' });
+    pool.query('SELECT * FROM todos WHERE id=($1)', [id],(error, results) => {
+      if (error) {
+        console.log(error);
+      }
+      res.status(200).json(results.rows);
+    })
   });
 });
 
