@@ -1,0 +1,27 @@
+.nav-container {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px solid grey;
+}
+
+.nav-container a {
+  color: black;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.login-form {
+  margin-top: 20vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form input {
+  width: 30%;
+  margin: 1rem auto;
+}
+
+.todolist-container li{
+  display: flex;
+  justify-content: space-between;
+}

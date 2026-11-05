@@ -1,0 +1,52 @@
+{
+  "name": "todo-serverless-express",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "axios": "^1.16.0",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.22.2",
+    "express-validator": "^6.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.13.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^7.5.2",
+    "react-scripts": "5.0.1",
+    "serverless-http": "^2.5.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build:app": "npm install && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start:lambda": "netlify-lambda serve api",
+    "prod": "npm run build:lambda; npm run build:app",
+    "build:lambda": "netlify-lambda build api"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "netlify-lambda": "^2.0.1"
+  }
+}
