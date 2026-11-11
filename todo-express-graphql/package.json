@@ -22,7 +22,7 @@
     "express": "^4.22.2",
     "express-graphql": "^0.11.0",
     "graphql": "^15.3.0",
-    "mongoose": "^8.9.5"
+    "mongoose": "^8.24.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
